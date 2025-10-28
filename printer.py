@@ -1,7 +1,8 @@
 import pandas as pd
+from typing import Union
 
 class Printer:
-    def printer(self, message: str | list | dict, output_type: str = "plain") -> None:
+    def printer(self, message: Union[str, list, dict], output_type: str = "plain") -> None:
             """
             Print messages in different formats.
             

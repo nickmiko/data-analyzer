@@ -1,6 +1,6 @@
 from typing import Callable, Any, Dict, List, Tuple, Optional
 
-def menu(label: str | None = None, order: int | None = None, section: str | None = None):
+def menu(label: Optional[str] = None, order: Optional[int] = None, section: Optional[str] = None):
     """Decorator to mark methods as menu items with optional label, order, and section (submenu)."""
     def decorator(func: Callable):
         setattr(func, "_menu_meta", {
@@ -61,7 +61,7 @@ class MenuSelector:
         actions.sort(key=lambda t: t[0].lower())
         return actions
 
-    def items_table(self, section: str | None = None) -> List[Dict[str, str]]:
+    def items_table(self, section: Optional[str] = None) -> List[Dict[str, str]]:
         """
         Build a display table for the current view.
         - Root: shows root actions and sections.
@@ -85,7 +85,7 @@ class MenuSelector:
             rows.insert(0, {"id": "0", "action": "◀ Back"})
         return rows
 
-    def select(self, choice: str, section: str | None = None) -> Tuple[str, Any] | None:
+    def select(self, choice: str, section: Optional[str] = None) -> Optional[Tuple[str, Any]]:
         """
         Map a choice to a result:
         - Root: returns ('action', func) or ('section', section_name)
