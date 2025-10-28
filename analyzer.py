@@ -8,6 +8,7 @@ class Analyzer:
         if self.data is None or self.data.empty:
             self.printer("No data loaded.", "error")
             return
+        self.data_output_style = "json"
 
     def analyze(self):
         # Run basic analysis if data is present
@@ -45,7 +46,7 @@ class Analyzer:
         }
         
         self.printer("Data Quality Report:", "info")
-        self.printer(quality_report, "json")
+        self.printer(quality_report, self.data_output_style)
 
     
     def group_analysis(self):
@@ -57,7 +58,7 @@ class Analyzer:
         # Show numeric columns
         numeric_cols = self.data.select_dtypes(include=['int64', 'float64']).columns.tolist()
         self.printer("Available numeric columns:", "info")
-        self.printer([{"column": col} for col in numeric_cols], "table")
+        self.printer([{"column": col} for col in numeric_cols], self.data_output_style)
         
         # Get group by column
         group_col = input("Enter column name to group by: ").strip()
@@ -78,7 +79,7 @@ class Analyzer:
             result = self.data.groupby(group_col)[numeric_cols].agg(['mean', 'median', 'std', 'count']).round(2)
         
         self.printer(f"\nGroup analysis by '{group_col}':", "info")
-        self.printer(result.to_dict('index'), "json")
+        self.printer(result.to_dict('index'), self.data_output_style)
 
     def correlation_analysis(self):
         """Analyze correlations between numeric columns"""
@@ -96,7 +97,7 @@ class Analyzer:
         correlations = numeric_cols.corr().round(2)
         
         self.printer("Correlation Matrix:", "info")
-        self.printer(correlations.to_dict('index'), "json")
+        self.printer(correlations.to_dict('index'), self.data_output_style)
 
     def analyze_distribution(self):
         """Analyze value distributions in columns"""
@@ -127,7 +128,7 @@ class Analyzer:
         }
         
         self.printer(f"\nDistribution analysis for '{col_name}':", "info")
-        self.printer(stats, "json")
+        self.printer(stats, self.data_output_style)
 
     def time_series_analysis(self):
         """Analyze time-based patterns in the data"""
@@ -178,4 +179,4 @@ class Analyzer:
         }
         
         self.printer(f"\nTime series analysis for '{date_col}':", "info")
-        self.printer(analysis, "json")
+        self.printer(analysis, self.data_output_style)
